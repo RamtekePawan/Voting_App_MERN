@@ -3,6 +3,7 @@ import { LoginOutlined, MailOutlined, KeyOutlined } from '@ant-design/icons';
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+const REACT_APP_BACKEND_API = import.meta.env.VITE_BACKEND_API;
 import axios from 'axios';
 
 
@@ -16,13 +17,14 @@ const LoginPageWithAntD = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [error, setError] = useState(false);
 
+
     const navigate = useNavigate();
     const user = {
         email: email || "",
         password: password || ""
     };
 
-    const url = `http://localhost:5000/api/users/login`;
+    const url = `${REACT_APP_BACKEND_API}/api/users/login`;
 
 
     const loginHandler = (values) => {
@@ -56,7 +58,7 @@ const LoginPageWithAntD = () => {
                         })
                         navigate("/doVote", { state: { email: userToBackend.email } });
                         console.log(response.data.role);
-                        
+
                     }
                     if (response.data.role === 'Admin') {
                         Cookies.set('token', response.data.token);
@@ -65,7 +67,7 @@ const LoginPageWithAntD = () => {
                             message: "Welcome  ADMIN !!!"
                         })
                         navigate("/adminPanel")
-                    } 
+                    }
                 } catch (error) {
                     if (error.response) {
                         setErrorMessage(() => {
@@ -85,12 +87,15 @@ const LoginPageWithAntD = () => {
                         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                         // http.ClientRequest in node.js
                         console.log("error.request :", error.request);
+                        notification.error({
+                            message: 'Something Went Wrong !!',
+                        });
                         setIsLoading(false);
                     } else {
                         // Something happened in setting up the request that triggered an Error
                         console.log('Error', error.message);
                         notification.error({
-                            message: "Something happened in setting up the request",
+                            message: "Server Down !!!",
                         });
                         setIsLoading(false);
                     }

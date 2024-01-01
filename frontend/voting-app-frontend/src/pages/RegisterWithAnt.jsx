@@ -4,6 +4,7 @@ import { UserAddOutlined, PhoneFilled, MailOutlined, KeyOutlined, UserOutlined, 
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+const REACT_APP_BACKEND_API = import.meta.env.VITE_BACKEND_API;
 import { triggerFocus } from 'antd/es/input/Input';
 
 const RegisterWithAnt = () => {
@@ -14,7 +15,7 @@ const RegisterWithAnt = () => {
 
     const navigate = useNavigate();
 
-    const url = `http://localhost:5000/api/users/register`;
+    const url = `${REACT_APP_BACKEND_API}/api/users/register`;
 
     const onFinishHandler = (values) => {
         console.log('onFinish()', values);
@@ -56,10 +57,18 @@ const RegisterWithAnt = () => {
                     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                     // http.ClientRequest in node.js
                     console.log("error.request :", error.request);
+                    notification.error({
+                        message: 'Something went Wrong !!',
+                    });
+                    setIsLoading(false);
 
                 } else {
                     // Something happened in setting up the request that triggered an Error
                     console.log('Error', error.message);
+                    notification.error({
+                        message: 'Server Down !!',
+                    });
+                    setIsLoading(false);
                 }
             }
         })();
@@ -148,7 +157,7 @@ const RegisterWithAnt = () => {
                     </Form></Spin>)
                         :
                         <Form autoComplete='off'
-                            labelCol={{ span: 6  }}
+                            labelCol={{ span: 6 }}
                             wrapperCol={{ span: 18 }}
                             onFinish={(values) => {
                                 onFinishHandler(values);

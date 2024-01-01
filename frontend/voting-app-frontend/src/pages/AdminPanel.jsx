@@ -3,29 +3,32 @@ import axios from 'axios';
 import { Table, Space, Button, notification, Spin } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
+const REACT_APP_BACKEND_API = import.meta.env.VITE_BACKEND_API;
 import { useNavigate } from 'react-router-dom';
 
 const AdminPanel = () => {
     const navigate = useNavigate();
     const [candidates, setCandidates] = useState([]);
     const [loading, setLoading] = useState(false)
-    useEffect(() => {
 
-        const fetchCandidates = async () => {
-            try {
-                setLoading(true);
-                const urlAdmin = `http://localhost:5000/api/users/vote`;
-                const response = await axios.get(urlAdmin);
-                setCandidates(response.data);
-                console.table(response.data);
-                setLoding(false);
-            } catch (error) {
-                console.error('Error fetching candidates:', error);
-                setLoading(false);
-            }
-        };
+    useEffect(() => {
         fetchCandidates();
     }, []);
+
+    const fetchCandidates = async () => {
+        try {
+            setLoading(true);
+            const urlAdmin = `${REACT_APP_BACKEND_API}/api/users/vote`;
+            const response = await axios.get(urlAdmin);
+            setCandidates(response.data);
+            console.table(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching candidates:', error);
+            setLoading(false);
+        }
+    };
+
 
     const handleLogout = () => {
         Cookies.remove('token');
@@ -37,7 +40,7 @@ const AdminPanel = () => {
 
     const columns = [
         {
-            title: <strong>Candidate</strong>,
+            title: <strong>Candidates</strong>,
             dataIndex: 'candidate',
             key: 'candidate',
             render: (text) => <b>{text}</b>,
@@ -61,6 +64,7 @@ const AdminPanel = () => {
             : [];
 
     return (
+
         <div className='container mt-4'>
             <h2>Admin Panel</h2>
             {loading ? (<Spin><Table columns={columns} dataSource={dataSource} bordered responsive /></Spin>) :
