@@ -12,7 +12,7 @@ const { doVote, getVotes } = require('./controllers/voteController')
 const app = express();
 
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://voting-mern-pawan.netlify.app/"],
     credentials: true,
 })
 );
