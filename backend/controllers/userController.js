@@ -74,7 +74,7 @@ const getUserVoted = asyncHandler(async (req, res) => {
     console.log(email);
     const user = await User.findOne({ email: email });
     const isVoted = user.isVoted;
-    return res.status(200).json({ isVoted: isVoted }).header('Access-Control-Allow-Credentials', true);
+    return res.status(200).json({ isVoted: isVoted })
 });
 //Login User
 const login = asyncHandler(async (req, res) => {
