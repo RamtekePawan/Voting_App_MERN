@@ -77,7 +77,7 @@ const getUserVoted = asyncHandler(async (req, res) => {
     console.log(email);
     const user = await User.findOne({ email: email });
     const isVoted = user.isVoted;
-    return res.status(200).json({ isVoted: isVoted });
+    return res.status(200).json({ isVoted: isVoted }).header('Access-Control-Allow-Credentials', true);
 });
 //Login User
 const login = asyncHandler(async (req, res) => {
@@ -143,7 +143,7 @@ const login = asyncHandler(async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(error.status).json({ error: error.message });
+        res.status(error.status).json({ error: error.message }).header(header('Access-Control-Allow-Credentials', true));
     }
 
 })
