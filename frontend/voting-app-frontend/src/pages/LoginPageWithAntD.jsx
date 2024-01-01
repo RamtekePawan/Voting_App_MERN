@@ -71,11 +71,9 @@ const LoginPageWithAntD = () => {
                 } catch (error) {
                     if (error.response) {
                         setErrorMessage(() => {
-                            const newErrorMessage = error.response.data?.error;
-                            console.log("data.error", error.response.data);
+                            const newErrorMessage = error.response.data.message;
+                            console.log("data.error", error.response.data.message);
                             Cookies.remove('token');
-
-                            // Use Ant Design notification for the error message
                             notification.error({
                                 message: newErrorMessage,
                             });
@@ -99,6 +97,7 @@ const LoginPageWithAntD = () => {
                         });
                         setIsLoading(false);
                     }
+
                 }
             })();
     }

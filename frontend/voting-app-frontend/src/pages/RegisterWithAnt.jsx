@@ -41,8 +41,8 @@ const RegisterWithAnt = () => {
                 setIsLoading(false);
                 if (error.response) {
                     setErrorMessage(() => {
-                        const newErrorMessage = error.response.data?.error;
-                        console.log("data.error", error.response.data);
+                        const newErrorMessage = error.response.data?.message;
+                        console.log("data", error.response.data);
                         Cookies.remove('token');
 
                         // Use Ant Design notification for the error message
