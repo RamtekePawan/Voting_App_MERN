@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'
+import NavigationBar from './NavigationBar';
 
 const LoginPage = () => {
 
@@ -75,33 +76,37 @@ const LoginPage = () => {
         }
 
     });
+    
     return (
-        <div className='justify-content-center align-items-center '>
-            <div className='container w-50 h-100 mt-5 p-2 justify-content-center align-items-center text-center bg-body-secondary'>
-                <h1> LogIn </h1>
+        <>
+           
+            <div className='justify-content-center align-items-center '>
+                <div className='container w-50 h-100 mt-5 p-2 justify-content-center align-items-center text-center bg-body-secondary'>
+                    <h1> LogIn </h1>
 
-                <form onSubmit={handleSubmit} method='POST' className='row justify-content-center mt-5'>
+                    <form onSubmit={handleSubmit} method='POST' className='row justify-content-center mt-5'>
 
-                    <input type='text' className='col-12 form-control w-50 p-2 m-2' id="email" name="email" placeholder="Enter Email..." onChange={handleChange} onBlur={handleBlur} value={values.email} />
+                        <input type='text' className='col-12 form-control w-50 p-2 m-2' id="email" name="email" placeholder="Enter Email..." onChange={handleChange} onBlur={handleBlur} value={values.email} />
 
-                    <br />
-                    {errors.email && touched.email ? (<p className='text-danger form-error' >{errors.email}
-                    </p>) : null
-                    }
+                        <br />
+                        {errors.email && touched.email ? (<p className='text-danger form-error' >{errors.email}
+                        </p>) : null
+                        }
 
-                    <input type='password' className='form-control w-50 p-2 m-2' id="password" name="password" placeholder="Enter Password..." onChange={handleChange} onBlur={handleBlur} value={values.password} />
+                        <input type='password' className='form-control w-50 p-2 m-2' id="password" name="password" placeholder="Enter Password..." onChange={handleChange} onBlur={handleBlur} value={values.password} />
 
-                    {errors.password && touched.password ? (<p className='text-danger'>{errors.password}
-                    </p>) : null
-                    }
+                        {errors.password && touched.password ? (<p className='text-danger'>{errors.password}
+                        </p>) : null
+                        }
 
-                    <input type="submit" className='w-50 m-3 p-2 bg-primary fw-bold' value="LOGIN" />
+                        <input type="submit" className='w-50 m-3 p-2 bg-primary fw-bold' value="LOGIN" />
 
-                </form>
+                    </form>
 
-                <button className='btn btn-info'><Link to='/register'> Register  </Link></button>
-            </div>
-        </div >
+                    <button className='btn btn-info'><Link to='/register'> Register  </Link></button>
+                </div>
+            </div >
+        </>
     )
 }
 

@@ -5,6 +5,7 @@ import { LogoutOutlined } from '@ant-design/icons';
 import Cookies from 'js-cookie';
 const REACT_APP_BACKEND_API = import.meta.env.VITE_BACKEND_API;
 import { useNavigate } from 'react-router-dom';
+import NavigationBar from './NavigationBar';
 
 const AdminPanel = () => {
     const navigate = useNavigate();
@@ -33,8 +34,10 @@ const AdminPanel = () => {
     const handleLogout = () => {
         Cookies.remove('token');
         notification.success({
-            message: "Admin Logged Out Successfully !!!"
-        })
+            message: "Admin Logged Out Successfully !!!",
+            placement: 'top'
+        });
+        localStorage.setItem('isLoggedIn', false);
         navigate('/');
     };
 
@@ -64,17 +67,19 @@ const AdminPanel = () => {
             : [];
 
     return (
-
-        <div className='container mt-4'>
-            <h2>Admin Panel</h2>
-            {loading ? (<Spin><Table columns={columns} dataSource={dataSource} bordered responsive /></Spin>) :
-                <Table columns={columns} dataSource={dataSource} bordered responsive />}
-            <Space direction='vertical' style={{ marginTop: '20px' }}>
-                <Button type='primary' icon={<LogoutOutlined />} onClick={handleLogout}>
-                    Logout
-                </Button>
-            </Space>
-        </div>
+        <>
+            <NavigationBar email={'ADMIN'} logoutAction={handleLogout} />
+            <div className='container mt-4'>
+                <h2>Admin Panel</h2>
+                {loading ? (<Spin><Table columns={columns} dataSource={dataSource} bordered responsive /></Spin>) :
+                    <Table columns={columns} dataSource={dataSource} bordered responsive />}
+                <Space direction='vertical' style={{ marginTop: '20px' }}>
+                    <Button type='primary' icon={<LogoutOutlined />} onClick={handleLogout}>
+                        Logout
+                    </Button>
+                </Space>
+            </div>
+        </>
     );
 };
 

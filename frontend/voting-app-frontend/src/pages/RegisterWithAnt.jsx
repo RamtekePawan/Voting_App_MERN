@@ -48,6 +48,7 @@ const RegisterWithAnt = () => {
                         // Use Ant Design notification for the error message
                         notification.error({
                             message: newErrorMessage,
+                            placement: 'top'
                         });
                         setIsLoading(false);
                         return newErrorMessage;
@@ -59,6 +60,7 @@ const RegisterWithAnt = () => {
                     console.log("error.request :", error.request);
                     notification.error({
                         message: 'Something went Wrong !!',
+                        placement: 'top'
                     });
                     setIsLoading(false);
 
@@ -67,6 +69,7 @@ const RegisterWithAnt = () => {
                     console.log('Error', error.message);
                     notification.error({
                         message: 'Server Down !!',
+                        placement: 'top'
                     });
                     setIsLoading(false);
                 }

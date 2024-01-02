@@ -7,9 +7,13 @@ import AdminPanel from "./pages/AdminPanel";
 import Success from "./pages/Success";
 import RegisterWithAnt from "./pages/RegisterWithAnt";
 import LoginPageWithAntD from "./pages/LoginPageWithAntD";
+import Cookies from "js-cookie";
 
 
 function App() {
+
+ 
+
   return (
     <BrowserRouter>
       <Routes>

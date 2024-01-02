@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 const REACT_APP_BACKEND_API = import.meta.env.VITE_BACKEND_API;
 import axios from 'axios';
+import NavigationBar from './NavigationBar';
 
 
 const LoginPageWithAntD = () => {
@@ -12,11 +13,9 @@ const LoginPageWithAntD = () => {
     const { state } = useLocation();
     const { email, password } = state || {};
     console.log("useLocation =>", email, password);
-
     const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [error, setError] = useState(false);
-
 
     const navigate = useNavigate();
     const user = {
@@ -44,7 +43,7 @@ const LoginPageWithAntD = () => {
 
                     console.log('response', response.data);
                     Cookies.set('token', response.data.token);
-
+                    localStorage.setItem('isLoggedIn', 'user Is LoggedIn');
                     console.log(response.data);
                     if (response.status !== 200) {
                         console.log("inside 200 wala error: ")
@@ -54,7 +53,8 @@ const LoginPageWithAntD = () => {
                         Cookies.set('token', response.data.token);
                         setIsLoading(false);
                         notification.success({
-                            message: `Welcome ${values.email} !!!`
+                            message: `Welcome ${values.email} !!!`,
+                            placement: 'top'
                         })
                         navigate("/doVote", { state: { email: userToBackend.email } });
                         console.log(response.data.role);
@@ -64,7 +64,8 @@ const LoginPageWithAntD = () => {
                         Cookies.set('token', response.data.token);
                         console.log(response.data.role);
                         notification.success({
-                            message: "Welcome  ADMIN !!!"
+                            message: "Welcome  ADMIN !!!",
+                            placement: 'top'
                         })
                         navigate("/adminPanel")
                     }
@@ -101,6 +102,7 @@ const LoginPageWithAntD = () => {
                 }
             })();
     }
+
     return (
         <div>
             <Row className='p-4 m-5' justify={'center'} align={'middle'}  >

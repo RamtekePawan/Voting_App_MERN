@@ -6,13 +6,18 @@ const REACT_APP_BACKEND_API = import.meta.env.VITE_BACKEND_API;
 import Cookies from 'js-cookie';
 import { Button, Col, Row, Form, Radio, notification } from 'antd';
 import './DoVote.css'; // Import your custom CSS file for additional styling
+import Navbar from './NavigationBar';
+import NavigationBar from './NavigationBar';
 
 const DoVote = () => {
     const { state } = useLocation();
-    const { email } = state;
+    const { email } = state || {};
     const [voted, setVoted] = useState(false);
+    const [justVoted, setJustVoted] = useState(false);
     const [error, setError] = useState('');
+
     const [form] = Form.useForm();
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,13 +37,16 @@ const DoVote = () => {
             const response = await axios.post(urlVote, vote);
             notification.success({
                 message: `You have Successfully Voted to Candidate-${values.candidate} !!!`,
+                placement: 'top'
             });
             form.resetFields();
+            setJustVoted(true);
             setVoted(true);
         } catch (error) {
             if (error.response) {
                 notification.error({
                     message: error.response.data?.message,
+                    placement: 'top'
                 });
             }
         }
@@ -50,70 +58,102 @@ const DoVote = () => {
 
     const logoutAction = () => {
         Cookies.remove('token');
+        setJustVoted(false);
         setVoted(false);
+        localStorage.setItem('isLoggedIn', false);
         notification.success({
-            message: "Successfully logged out"
+            message: "Successfully logged out",
+            placement: 'top'
         });
         navigate('/');
     };
 
-    return (<>
-        <Row justify={'center'}><h1 className='mt-3  ms-4 text-danger-emphasis'>Voting App</h1></Row>
-        <Row className='px-4 pt-0 ' justify='center' align='middle'>
+    return (
+        <>
+            <NavigationBar email={email} logoutAction={logoutAction} />
+            <Row className='px-4 pt-0 ' justify='center' align='middle'>
+                <Col span={12} style={{ maxWidth: '640px', maxHeight: '640px' }}>
+                    <Row justify='center'>
+                        <h1 className='p-3 my-2 mt-0'></h1>
+                    </Row>
+                    <div className='container mt-5 vote-container'>
+                        {!voted ? (
+                            <Form form={form} onFinish={onFinish}>
+                                {[1, 2, 3, 4].map((candidate) => (
+                                    <Form.Item key={candidate} name='candidate' className='mb-3'>
+                                        <Radio
+                                            value={candidate}
+                                            checked={form.getFieldValue('candidate') === candidate}
+                                            onChange={() => handleVote(candidate)}
+                                            className='candidate-radio'
+                                        >
+                                            Candidate {candidate}
+                                        </Radio>
+                                    </Form.Item>
+                                ))}
+                                <Form.Item>
+                                    <Button
+                                        type='primary'
+                                        block
+                                        size='large'
+                                        danger
+                                        icon={<RocketOutlined />}
+                                        disabled={voted}
+                                        htmlType='submit'
+                                        className='vote-button'
+                                    >
+                                        Vote
+                                    </Button>
+                                    {justVoted && <p className='text-success text-center'> Successfully Voted !!</p>}
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type='primary' icon={<LogoutOutlined />} onClick={logoutAction} className='logout-button'>
+                                        Logout
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+                        ) : justVoted ? (
+                            <Form form={form} onFinish={onFinish}>
+                                {[1, 2, 3, 4].map((candidate) => (
+                                    <Form.Item key={candidate} name='candidate' className='mb-3'>
+                                        <Radio
+                                            value={candidate}
+                                            checked={form.getFieldValue('candidate') === candidate}
+                                            onChange={() => handleVote(candidate)}
+                                            className='candidate-radio'
+                                        >
+                                            Candidate {candidate}
+                                        </Radio>
+                                    </Form.Item>
+                                ))}
+                                <Form.Item>
+                                    <Button
+                                        type='primary'
+                                        block
+                                        size='large'
+                                        danger
+                                        icon={<RocketOutlined />}
+                                        disabled={voted}
+                                        htmlType='submit'
+                                        className='vote-button'
+                                    >
+                                        Vote
+                                    </Button>
+                                    {justVoted && <p className='text-success text-center'> Successfully Voted !!</p>}
+                                </Form.Item>
 
-            <Col span={12} style={{ maxWidth: '640px', maxHeight: '640px' }}>
-
-                <Row justify='center'>
-                    <h1 className='p-3 my-2 mt-0'></h1>
-                </Row>
-
-                <div className='container mt-5 vote-container'>
-                    <h6 className='text-end'>{state.email}</h6>
-                    <div className='d-flex justify-content-center'>
-                        <h1>Do Vote</h1>
+                            </Form>
+                        ) : <h1> You Have Already Voted! </h1>
+                        }
                     </div>
-                    <Form form={form} onFinish={onFinish}>
-                        {[1, 2, 3, 4].map((candidate) => (
-                            <Form.Item key={candidate} name='candidate' className='mb-3'>
-                                <Radio
-                                    value={candidate}
-                                    checked={form.getFieldValue('candidate') === candidate}
-                                    onChange={() => handleVote(candidate)}
-                                    className='candidate-radio'
-                                >
-                                    Candidate {candidate}
-                                </Radio>
-                            </Form.Item>
-                        ))}
-                        <Form.Item>
-                            <Button
-                                type='primary'
-                                block
-                                size='large'
-                                danger
-                                icon={<RocketOutlined />}
-                                disabled={voted}
-                                htmlType='submit'
-                                className='vote-button'
-                            >
-                                Vote
-                            </Button>
-                            {voted && <p className='text-danger text-center'> You Have Already voted!!</p>}
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type='primary' icon={<LogoutOutlined />} onClick={logoutAction} className='logout-button'>
-                                Logout
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </div>
-            </Col>
-        </Row>
-    </>
+                </Col>
+            </Row>
+        </>
     );
 };
 
 export default DoVote;
+
 
 
 
@@ -125,6 +165,17 @@ export default DoVote;
 // import Cookies from 'js-cookie';
 // import { Button, Col, Input, Row, notification } from 'antd';
 // import { icons } from 'antd/es/image/PreviewGroup';
+
+
+//*
+// <Radio
+//     value={candidate}
+//     checked={form.getFieldValue('candidate') === candidate}
+//     onChange={() => handleVote(candidate)}
+//     className='candidate-radio'
+// >
+//     Candidate {candidate}
+// </Radio>
 
 
 // const DoVote = () => {
