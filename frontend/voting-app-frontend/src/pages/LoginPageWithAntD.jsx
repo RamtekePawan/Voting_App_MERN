@@ -4,8 +4,8 @@ import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 const REACT_APP_BACKEND_API = import.meta.env.VITE_BACKEND_API;
+import config from '../../config/config'
 import axios from 'axios';
-import NavigationBar from './NavigationBar';
 
 
 const LoginPageWithAntD = () => {
@@ -23,7 +23,8 @@ const LoginPageWithAntD = () => {
         password: password || ""
     };
 
-    const url = `${REACT_APP_BACKEND_API}/api/users/login`;
+   
+    const url = `${config.backendUrl}/api/users/login`;
 
 
     const loginHandler = (values) => {

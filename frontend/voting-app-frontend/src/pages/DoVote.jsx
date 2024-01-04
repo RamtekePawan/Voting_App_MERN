@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { LogoutOutlined, RocketOutlined } from '@ant-design/icons';
+import { LogoutOutlined, RocketOutlined, CheckOutlined } from '@ant-design/icons';
 import axios from 'axios';
 const REACT_APP_BACKEND_API = import.meta.env.VITE_BACKEND_API;
 import Cookies from 'js-cookie';
@@ -15,6 +15,7 @@ const DoVote = () => {
     const [voted, setVoted] = useState(false);
     const [justVoted, setJustVoted] = useState(false);
     const [error, setError] = useState('');
+    const [selectedCandidate, setSelectedCandidate] = useState(0)
 
     const [form] = Form.useForm();
 
@@ -39,7 +40,7 @@ const DoVote = () => {
                 message: `You have Successfully Voted to Candidate-${values.candidate} !!!`,
                 placement: 'top'
             });
-            form.resetFields();
+            selectedCandidate(0);
             setJustVoted(true);
             setVoted(true);
         } catch (error) {
@@ -53,8 +54,11 @@ const DoVote = () => {
     };
 
     const handleVote = (vote) => {
+        console.log('handleVote', vote);
         form.setFieldsValue({ candidate: vote });
+        setSelectedCandidate(vote);
     };
+
 
     const logoutAction = () => {
         Cookies.remove('token');
@@ -83,12 +87,14 @@ const DoVote = () => {
                                     <Form.Item key={candidate} name='candidate' className='mb-3'>
                                         <Radio
                                             value={candidate}
-                                            checked={form.getFieldValue('candidate') === candidate}
+                                            checked={selectedCandidate === candidate}
                                             onChange={() => handleVote(candidate)}
                                             className='candidate-radio'
                                         >
-                                            Candidate {candidate}
+                                            Candidate {candidate}  {(selectedCandidate === candidate) ? <CheckOutlined /> : ''}
+
                                         </Radio>
+
                                     </Form.Item>
                                 ))}
                                 <Form.Item>
@@ -156,177 +162,4 @@ export default DoVote;
 
 
 
-
-// import React, { useEffect, useState } from 'react'
-// import { useLocation, useNavigate } from 'react-router-dom';
-// import { LogoutOutlined, RocketOutlined } from '@ant-design/icons';
-// import '../../axiosConfig';
-// import axios from 'axios';
-// import Cookies from 'js-cookie';
-// import { Button, Col, Input, Row, notification } from 'antd';
-// import { icons } from 'antd/es/image/PreviewGroup';
-
-
-//*
-// <Radio
-//     value={candidate}
-//     checked={form.getFieldValue('candidate') === candidate}
-//     onChange={() => handleVote(candidate)}
-//     className='candidate-radio'
-// >
-//     Candidate {candidate}
-// </Radio>
-
-
-// const DoVote = () => {
-//     const { state } = useLocation();
-//     const { email } = state;
-
-//     const [voted, setVoted] = useState(false);
-//     const [error, setError] = useState('');
-//     const [selectedCandidate, setSelectedCandidate] = useState(0);
-//     const navigate = useNavigate();
-
-//     const logoutAction = () => {
-//         Cookies.remove('token');
-//         setVoted(false);
-//         navigate('/');
-//     }
-//     useEffect(() => {
-//         axios.post(`http://localhost:5000/api/users/getVote`, { email: email }).then((res) => {
-//             console.log(res.data);
-//             console.log(res.data.isVoted)
-//             setVoted(res.data.isVoted);
-//         })
-//     }, []);
-
-//     const handleSubmit = async (event) => {
-//         event.preventDefault();
-//         // Perform voting logic with the selected candidate
-
-//         const urlVote = `http://localhost:5000/api/users/vote`;
-//         const vote = {
-//             vote: selectedCandidate
-//         };
-//         console.log('Voted for candidate:', vote);
-
-//         await axios.post(urlVote, vote)
-//             .then((response) => {
-//                 setError('');
-//                 console.log("voted :", response.data);
-//                 notification.success({
-//                     message: `You have Successfully Voted to Candidate-${selectedCandidate} !!!`
-//                 });
-//                 setSelectedCandidate(0);
-//             }).catch((error) => {
-//                 if (error.response) {
-
-//                     console.log(error.response.data?.message);
-//                     ; (async () => {
-//                         notification.error({
-//                             message: error.response.data?.message,
-//                         })
-//                     })()
-//                     setSelectedCandidate(0);
-//                 }
-//             })
-//     }
-
-//     const handleVote = (vote) => {
-//         setSelectedCandidate(vote);
-//     }
-
-
-
-//     return (
-//         <Row className='p-4 m-5' justify={'center'} align={'middle'}  >
-//             <Col className='bg-light py-5 px-2 pe-3' span={12} style={{ maxWidth: '640px', maxHeight: '640px' }}>
-//                 <Row justify={'center'}><h1 className='p-3 my-2 mt-0'> </h1></Row>
-
-//                 <div className='container mt-5'>
-//                     <h6 className='text-end'>{state.email}</h6>
-//                     <div className='d-flex justify-content-center'>
-//                         <h1>Do Vote</h1>
-//                     </div>
-//                     <form onSubmit={handleSubmit} method='post'>
-//                         <div className='mb-3'>
-//                             <label className='form-check-label'>
-//                                 <input
-//                                     type='radio'
-//                                     name='candidate'
-//                                     id='1'
-//                                     value='1'
-//                                     checked={selectedCandidate === 1}
-//                                     onChange={() => handleVote(1)}
-//                                     className='form-check-input'
-//                                 />
-//                                 Candidate 1
-//                             </label>
-//                         </div>
-
-//                         <div className='mb-3'>
-//                             <label className='form-check-label'>
-//                                 <input
-//                                     type='radio'
-//                                     name='candidate'
-//                                     id='2'
-//                                     value='2'
-//                                     checked={selectedCandidate === 2}
-//                                     onChange={() => handleVote(2)}
-//                                     className='form-check-input'
-//                                 />
-//                                 Candidate 2
-//                             </label>
-//                         </div>
-
-//                         <div className='mb-3'>
-//                             <label className='form-check-label'>
-//                                 <input
-//                                     type='radio'
-//                                     name='candidate'
-//                                     id='3'
-//                                     value='3'
-//                                     checked={selectedCandidate === 3}
-//                                     onChange={() => handleVote(3)}
-//                                     className='form-check-input'
-//                                 />
-//                                 Candidate 3
-//                             </label>
-//                         </div>
-
-//                         <div className='mb-3'>
-//                             <label className='form-check-label'>
-//                                 <input
-//                                     type='radio'
-//                                     name='candidate'
-//                                     id='4'
-//                                     value='4'
-//                                     checked={selectedCandidate === 4}
-//                                     onChange={() => handleVote(4)}
-//                                     className='form-check-input'
-//                                 />
-//                                 Candidate 4
-//                             </label>
-//                         </div>
-
-//                         <div className='mb-3'>
-//                             <Button type='primary' block size='large' danger icon={<RocketOutlined />}  disabled={voted} onClick={handleSubmit} className='btn btn-primary'>
-//                                 Vote
-//                             </Button>
-//                         </div>
-//                         <div className='mb-3'>
-//                             <Button type='primary' icon={<LogoutOutlined />} onClick={logoutAction}  className='btn btn-primary'>
-//                                 Logout
-//                             </Button>
-//                         </div>
-//                     </form>
-//                 </div>
-//                 );
-//             </Col>
-//         </Row>
-//     )
-
-// }
-
-// export default DoVote
 

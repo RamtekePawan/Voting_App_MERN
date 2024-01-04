@@ -13,13 +13,12 @@ import Cookies from "js-cookie";
 function App() {
 
  
-
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPageWithAntD />} />
         <Route path="/register" element={<RegisterWithAnt />} />
-        <Route path="/doVote" element={<DoVote />} />
+        <Route path="/doVote"  element={<DoVote  />} />
         <Route path="/error" element={<ErrorPage />} />
         <Route path="/success" element={<Success />} />
         <Route path="/adminPanel" element={<AdminPanel />} />
