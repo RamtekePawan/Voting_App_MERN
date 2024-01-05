@@ -112,14 +112,9 @@ const DoVote = () => {
                                     </Button>
                                     {justVoted && <p className='text-success text-center'> Successfully Voted !!</p>}
                                 </Form.Item>
-                                <Form.Item>
-                                    <Button type='primary' icon={<LogoutOutlined />} onClick={logoutAction} className='logout-button'>
-                                        Logout
-                                    </Button>
-                                </Form.Item>
                             </Form>
                         ) : justVoted ? (
-                            <Form form={form} onFinish={onFinish}>
+                            <Form form={form}>
                                 {[1, 2, 3, 4].map((candidate) => (
                                     <Form.Item key={candidate} name='candidate' className='mb-3'>
                                         <Radio
