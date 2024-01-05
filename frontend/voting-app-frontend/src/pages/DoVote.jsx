@@ -5,8 +5,7 @@ import axios from 'axios';
 const REACT_APP_BACKEND_API = import.meta.env.VITE_BACKEND_API;
 import Cookies from 'js-cookie';
 import { Button, Col, Row, Form, Radio, notification } from 'antd';
-import './DoVote.css'; // Import your custom CSS file for additional styling
-import Navbar from './NavigationBar';
+import './DoVote.css'; // CSS file for additional styling
 import NavigationBar from './NavigationBar';
 
 const DoVote = () => {
@@ -29,6 +28,7 @@ const DoVote = () => {
 
     const onFinish = async (values) => {
         const urlVote = `${REACT_APP_BACKEND_API}/api/users/vote`;
+
         const vote = {
             vote: values.candidate,
         };
@@ -40,7 +40,8 @@ const DoVote = () => {
                 message: `You have Successfully Voted to Candidate-${values.candidate} !!!`,
                 placement: 'top'
             });
-            selectedCandidate(0);
+            setSelectedCandidate(0);
+            console.log("justVoted", justVoted);
             setJustVoted(true);
             setVoted(true);
         } catch (error) {
@@ -87,14 +88,12 @@ const DoVote = () => {
                                     <Form.Item key={candidate} name='candidate' className='mb-3'>
                                         <Radio
                                             value={candidate}
-                                            checked={selectedCandidate === candidate}
+                                            checked={form.getFieldValue('candidate') === candidate}
                                             onChange={() => handleVote(candidate)}
                                             className='candidate-radio'
                                         >
-                                            Candidate {candidate}  {(selectedCandidate === candidate) ? <CheckOutlined /> : ''}
-
+                                            Candidate {candidate}
                                         </Radio>
-
                                     </Form.Item>
                                 ))}
                                 <Form.Item>
@@ -114,7 +113,7 @@ const DoVote = () => {
                                 </Form.Item>
                             </Form>
                         ) : justVoted ? (
-                            <Form form={form}>
+                            <Form form={form} onFinish={onFinish}>
                                 {[1, 2, 3, 4].map((candidate) => (
                                     <Form.Item key={candidate} name='candidate' className='mb-3'>
                                         <Radio
@@ -149,12 +148,6 @@ const DoVote = () => {
                     </div>
                 </Col>
             </Row>
-        </>
-    );
-};
-
+        </>)
+}
 export default DoVote;
-
-
-
-
