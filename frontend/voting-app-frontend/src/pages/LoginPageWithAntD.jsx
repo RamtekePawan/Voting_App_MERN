@@ -107,53 +107,17 @@ const LoginPageWithAntD = () => {
     return (
         <div>
             <Row className='p-4 m-5' justify={'center'} align={'middle'}  >
-                <Row>
-                    <Col className='bg-light py-3 px-2 pe-5' span={12} style={{ maxWidth: '640px', maxHeight: '640px' }}>
-                        <Row justify={'center'}><h1 className='p-3 ps-3 ms-4 mt-0 text-danger-emphasis'>Voting App</h1></Row>
-                        <Row justify={'center'}><h1 className='p-3 my-2 mt-0 mb-3 ps-5'> Login </h1></Row>
-                        {isLoading ? (<Spin size='large'><Form autoComplete='off'
-                            labelCol={{ span: 7 }}
-                            wrapperCol={{ span: 17 }}
-                            onFinish={(values) => {
-                                loginHandler(values);
-                            }}
-                            onFinishFailed={(error) => {
-                                console.log("error :", error);
-                            }}
-                        >
-
-                            <Form.Item name={'email'} label={'Email'} rules={[
-                                { required: true, message: 'Please enter your Email' },
-                                { type: 'email', message: 'Please enter valid email' }
-                            ]}
-                                hasFeedback>
-                                <Input value={user.email} addonBefore={<MailOutlined />} placeholder='Type your email..' />
-                            </Form.Item>
-
-                            <Form.Item name={'password'} label={'Password'} rules={[
-                                { required: true, message: 'Please enter your Password' },
-                                { min: 6, message: 'Please enter valid password' },
-                                {
-                                    pattern: /^(?=.*[A-Za-z])(?=.*\d).{6,}$/,
-                                    message: 'Enter a password with at least one letter and one number',
-                                },
-                            ]}
-                                hasFeedback>
-                                <Input.Password value={user.password} addonBefore={<KeyOutlined />} placeholder='Type your password...' />
-                            </Form.Item>
-                            <Form.Item className='my-5' wrapperCol={{ span: 16, offset: 5 }}>
-                                <Button icon={<LoginOutlined />} shape="default" block type='primary' htmlType='submit' > Login </Button>
-                            </Form.Item>
-
-
-                        </Form></Spin>) :
-                            (<Form autoComplete='off'
+                    <Col>
+                        <Col className='bg-light py-3 px-2 pe-5'> 
+                        {/* style={{ maxWidth: '640px', maxHeight: '640px' }} */}
+                            <Row justify={'center'}><h1 className='p-3 ps-3 ms-4 mt-0 text-danger-emphasis'>Voting App</h1></Row>
+                            <Row justify={'center'}><h1 className='p-3 my-2 mt-0 mb-3 ps-5'> Login </h1></Row>
+                            {isLoading ? (<Spin size='large'><Form autoComplete='off'
                                 labelCol={{ span: 7 }}
                                 wrapperCol={{ span: 17 }}
                                 onFinish={(values) => {
                                     loginHandler(values);
                                 }}
-                                initialValues={user || {}}
                                 onFinishFailed={(error) => {
                                     console.log("error :", error);
                                 }}
@@ -164,7 +128,7 @@ const LoginPageWithAntD = () => {
                                     { type: 'email', message: 'Please enter valid email' }
                                 ]}
                                     hasFeedback>
-                                    <Input addonBefore={<MailOutlined />} placeholder='Type your email..' />
+                                    <Input value={user.email} addonBefore={<MailOutlined />} placeholder='Type your email..' />
                                 </Form.Item>
 
                                 <Form.Item name={'password'} label={'Password'} rules={[
@@ -176,20 +140,58 @@ const LoginPageWithAntD = () => {
                                     },
                                 ]}
                                     hasFeedback>
-                                    <Input.Password addonBefore={<KeyOutlined />} placeholder='Type your password...' />
+                                    <Input.Password value={user.password} addonBefore={<KeyOutlined />} placeholder='Type your password...' />
                                 </Form.Item>
                                 <Form.Item className='my-5' wrapperCol={{ span: 16, offset: 5 }}>
                                     <Button icon={<LoginOutlined />} shape="default" block type='primary' htmlType='submit' > Login </Button>
                                 </Form.Item>
 
 
-                            </Form>)
-                        }
-                        <Row justify={'center'}> <h6> New to the App ?  <Link to={'/register'}>Register</Link></h6></Row>
+                            </Form></Spin>) :
+                                (<Form autoComplete='off'
+                                    labelCol={{ span: 7 }}
+                                    wrapperCol={{ span: 17 }}
+                                    onFinish={(values) => {
+                                        loginHandler(values);
+                                    }}
+                                    initialValues={user || {}}
+                                    onFinishFailed={(error) => {
+                                        console.log("error :", error);
+                                    }}
+                                >
 
+                                    <Form.Item name={'email'} label={'Email'} rules={[
+                                        { required: true, message: 'Please enter your Email' },
+                                        { type: 'email', message: 'Please enter valid email' }
+                                    ]}
+                                        hasFeedback>
+                                        <Input addonBefore={<MailOutlined />} placeholder='Type your email..' />
+                                    </Form.Item>
+
+                                    <Form.Item name={'password'} label={'Password'} rules={[
+                                        { required: true, message: 'Please enter your Password' },
+                                        { min: 6, message: 'Please enter valid password' },
+                                        {
+                                            pattern: /^(?=.*[A-Za-z])(?=.*\d).{6,}$/,
+                                            message: 'Enter a password with at least one letter and one number',
+                                        },
+                                    ]}
+                                        hasFeedback>
+                                        <Input.Password addonBefore={<KeyOutlined />} placeholder='Type your password...' />
+                                    </Form.Item>
+                                    <Form.Item className='my-5' wrapperCol={{ span: 16, offset: 5 }}>
+                                        <Button icon={<LoginOutlined />} shape="default" block type='primary' htmlType='submit' > Login </Button>
+                                    </Form.Item>
+
+
+                                </Form>)
+                            }
+                            <Row justify={'center'}> <h6> New to the App ?  <Link to={'/register'}>Register</Link></h6></Row>
+
+                        </Col>
                     </Col>
                 </Row>
-            </Row>
+  
         </div>
     )
 }
